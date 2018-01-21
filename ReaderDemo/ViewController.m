@@ -68,11 +68,17 @@
     
     CGRect frame = self.textField.frame;
     CGRect textFrameInPDF = [self.pdfview convertRect:frame toPage:page];
-    PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeText withProperties:nil];
-    annotation.font = [UIFont systemFontOfSize:18];
+    
+    
+    
+    PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeWidget withProperties:nil];
+    annotation.font = [UIFont systemFontOfSize:28];
+    annotation.widgetFieldType = PDFAnnotationWidgetSubtypeText;
+    annotation.widgetStringValue = text;
     annotation.fieldName = text;
     annotation.backgroundColor = [UIColor redColor];
     [page addAnnotation:annotation];
+    //现在的目标是让text在PDF中显示出来
 
     [self.pdfview setNeedsDisplay];
 }
