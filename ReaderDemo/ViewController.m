@@ -9,9 +9,11 @@
 #import "ViewController.h"
 #import <PDFKit/PDFKit.h>
 
-@interface ViewController ()
+@interface ViewController ()<UITextFieldDelegate>
 
 @property(nonatomic,strong)PDFView * pdfview;
+
+@property(nonatomic,strong)UITextField * textField;
 
 @end
 
@@ -45,6 +47,63 @@
 
 -(void)tapAction
 {
+    //接下来做tap输入文字
+    [self.textField removeFromSuperview];
+    self.textField = [[UITextField alloc]initWithFrame:CGRectMake(100, 100, 100, 40)];
+    [self.view addSubview:self.textField];
+    self.textField.backgroundColor = [UIColor orangeColor];
+    [self.textField becomeFirstResponder];
+    self.textField.delegate = self;
+}
+
+- (BOOL)textFieldShouldReturn:(UITextField *)textField
+{
+    [self insertTextAnnotation:textField.text];
+    return YES;
+}
+
+-(void)insertTextAnnotation:(NSString*)text
+{
+    PDFPage * page = self.pdfview.currentPage;
+    
+    CGRect frame = self.textField.frame;
+    CGRect textFrameInPDF = [self.pdfview convertRect:frame toPage:page];
+    PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeText withProperties:nil];
+    annotation.font = [UIFont systemFontOfSize:18];
+    annotation.fieldName = text;
+    annotation.backgroundColor = [UIColor redColor];
+    [page addAnnotation:annotation];
+
+    [self.pdfview setNeedsDisplay];
+}
+
+-(CGRect)converRect:(CGRect)rect fromInSize:(CGSize)originalSize toInSize:(CGSize)targetSize
+{
+    rect.size.width *= targetSize.width/originalSize.width;
+    rect.size.height *= targetSize.height/originalSize.height;
+    rect.origin.x *= targetSize.width/originalSize.width;
+    rect.origin.y *= targetSize.height/originalSize.height;
+    return rect;
+}
+
+-(void)doubleTapAction
+{
+    NSLog(@"%s",__func__);
+    
+    [self.textField removeFromSuperview];
+    
+    PDFPage * page = self.pdfview.currentPage;
+    
+    NSArray<PDFAnnotation*>* annotationArray = [page annotations];
+    
+    NSLog(@"%@",annotationArray);
+    for (PDFAnnotation * annotation in annotationArray) {
+        NSLog(@"%@",annotation.fieldName);
+    }
+}
+
+-(void)insertCircle
+{
     NSLog(@"%s",__func__);
     
     PDFPage * page = self.pdfview.currentPage;
@@ -57,16 +116,4 @@
     [self.pdfview setNeedsDisplay];
 }
 
--(void)doubleTapAction
-{
-    NSLog(@"%s",__func__);
-    PDFPage * page = self.pdfview.currentPage;
-    
-    NSArray<PDFAnnotation*>* annotationArray = [page annotations];
-    
-    NSLog(@"%@",annotationArray);
-    for (PDFAnnotation * annotation in annotationArray) {
-        NSLog(@"%@",annotation.fieldName);
-    }
-}
 @end
