@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6A75D97C20146B2C004CA597 /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6A75D97B20146B2C004CA597 /* sample.pdf */; };
+		6A75D97F201482B5004CA597 /* 3测试2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6A75D97E201482B5004CA597 /* 3测试2.pdf */; };
 		6AF512FF2013232D00D9675E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF512FE2013232D00D9675E /* AppDelegate.m */; };
 		6AF513022013232D00D9675E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF513012013232D00D9675E /* ViewController.m */; };
 		6AF513052013232D00D9675E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AF513032013232D00D9675E /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		6A75D97B20146B2C004CA597 /* sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample.pdf; sourceTree = "<group>"; };
+		6A75D97E201482B5004CA597 /* 3测试2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "3测试2.pdf"; sourceTree = "<group>"; };
 		6AF512FA2013232D00D9675E /* ReaderDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReaderDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6AF512FD2013232D00D9675E /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		6AF512FE2013232D00D9675E /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -67,6 +69,7 @@
 				6AF513032013232D00D9675E /* Main.storyboard */,
 				6A75D97B20146B2C004CA597 /* sample.pdf */,
 				6AF513062013232D00D9675E /* Assets.xcassets */,
+				6A75D97E201482B5004CA597 /* 3测试2.pdf */,
 				6AF513082013232D00D9675E /* LaunchScreen.storyboard */,
 				6AF5130B2013232D00D9675E /* Info.plist */,
 				6AF5130C2013232D00D9675E /* main.m */,
@@ -135,6 +138,7 @@
 				6AF5130A2013232D00D9675E /* LaunchScreen.storyboard in Resources */,
 				6AF513072013232D00D9675E /* Assets.xcassets in Resources */,
 				6AF513052013232D00D9675E /* Main.storyboard in Resources */,
+				6A75D97F201482B5004CA597 /* 3测试2.pdf in Resources */,
 				6A75D97C20146B2C004CA597 /* sample.pdf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
