@@ -25,20 +25,20 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-//    PDFView * pdfview = [[PDFView alloc]init];
-//    self.pdfview = pdfview;
-//    CGSize screenSize = [UIScreen mainScreen].bounds.size;
-//    pdfview.frame = CGRectMake(0, 0, screenSize.width, screenSize.height);
-//    [self.view addSubview:pdfview];
+    PDFView * pdfview = [[PDFView alloc]init];
+    self.pdfview = pdfview;
+    CGSize screenSize = [UIScreen mainScreen].bounds.size;
+    pdfview.frame = CGRectMake(0, 0, screenSize.width, screenSize.height);
+    [self.view addSubview:pdfview];
     
     NSURL * url = [[NSBundle mainBundle] URLForResource:@"sample" withExtension:@"pdf"];
     PDFDocument * pdfdocument = [[PDFDocument alloc]initWithURL:url];
     
-//    pdfview.document = pdfdocument;
-//    pdfview.displayMode = kPDFDisplaySinglePageContinuous;
-//    pdfview.autoScales = true;
+    pdfview.document = pdfdocument;
+    pdfview.displayMode = kPDFDisplaySinglePageContinuous;
+    pdfview.autoScales = true;
     
-    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction)];
+    UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction:)];
     [self.view addGestureRecognizer:tap];
     
     UITapGestureRecognizer * doubleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(doubleTapAction)];
@@ -47,24 +47,38 @@
     
     [tap requireGestureRecognizerToFail:doubleTap];
     
+    UILongPressGestureRecognizer * longGes = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
+    [self.view addGestureRecognizer:longGes];
+    [tap requireGestureRecognizerToFail:longGes];
+    
     self.testView = [[LLTestView alloc]init];
-    self.testView.frame = CGRectMake(0, 0, 200, 200);
-    self.testView.backgroundColor = [UIColor orangeColor];
+    self.testView.frame = CGRectMake(0, 0, screenSize.width, screenSize.height);
     [self.view addSubview:self.testView];
 }
 
--(void)tapAction
+-(void)longPress:(UILongPressGestureRecognizer*)longGes
 {
-    [self.testView becomeFirstResponder];
     UIMenuController * menu = [UIMenuController sharedMenuController];
-    UIMenuItem * item1 = [[UIMenuItem alloc]initWithTitle:@"剪切" action:@selector(insertWidget)];
-    UIMenuItem * item2 = [[UIMenuItem alloc]initWithTitle:@"粘贴" action:@selector(insertWidget)];
-    menu.menuItems = @[item1,item2];
-    
-    [menu setTargetRect:CGRectMake(100, 100, 100, 70) inView:self.testView];
-    //  [menu setTargetRect:self.frame inView:self.superview];
-    
-    [menu setMenuVisible:YES animated:YES];
+    if (menu.menuVisible) {
+        [menu setMenuVisible:NO];
+        [self.testView resignFirstResponder];
+    }
+    else
+    {
+        [self.testView becomeFirstResponder];
+        UIMenuItem * item1 = [[UIMenuItem alloc]initWithTitle:@"插入文本框" action:@selector(insertTextWidget:)];
+        UIMenuItem * item2 = [[UIMenuItem alloc]initWithTitle:@"粘贴" action:@selector(insertTextWidget:)];
+        menu.menuItems = @[item1,item2];
+        
+        CGPoint touchPoint = [longGes locationInView:self.testView];
+        [menu setTargetRect:CGRectMake(touchPoint.x, touchPoint.y, 80, 50) inView:self.testView];
+        
+        [menu setMenuVisible:YES animated:YES];
+    }
+}
+
+-(void)tapAction:(UITapGestureRecognizer*)tapGes
+{
     
 //    [self insertWidget];
     /*
@@ -85,11 +99,12 @@
 }
 
 //PDFAnnotationSubtypeWidget
--(void)insertWidget
+-(void)insertTextWidget:(UIMenuController *)menu
 {
+    CGPoint location = menu.menuFrame.origin;
     PDFPage * page = self.pdfview.currentPage;
     
-    CGRect frame = CGRectMake(100, 100, 100, 40);
+    CGRect frame = CGRectMake(location.x, location.y, 100, 40);
     CGRect textFrameInPDF = [self.pdfview convertRect:frame toPage:page];
     
     PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeWidget withProperties:nil];
