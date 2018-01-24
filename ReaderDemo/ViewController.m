@@ -47,6 +47,8 @@
 
 -(void)tapAction
 {
+    [self insertWidget];
+    /*
     //接下来做tap输入文字
     [self.textField removeFromSuperview];
     self.textField = [[UITextField alloc]initWithFrame:CGRectMake(100, 100, 100, 40)];
@@ -54,12 +56,30 @@
     self.textField.backgroundColor = [UIColor orangeColor];
     [self.textField becomeFirstResponder];
     self.textField.delegate = self;
+    */
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [self insertTextAnnotation:textField.text];
     return YES;
+}
+
+//PDFAnnotationSubtypeWidget
+-(void)insertWidget
+{
+    PDFPage * page = self.pdfview.currentPage;
+    
+    CGRect frame = CGRectMake(100, 100, 100, 40);
+    CGRect textFrameInPDF = [self.pdfview convertRect:frame toPage:page];
+    
+    PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeWidget withProperties:nil];
+    annotation.font = [UIFont systemFontOfSize:28];
+    annotation.widgetFieldType = PDFAnnotationWidgetSubtypeText;
+    annotation.alignment = NSTextAlignmentCenter;
+    annotation.backgroundColor = [UIColor orangeColor];
+    [page addAnnotation:annotation];
+    [self.pdfview setNeedsDisplay];
 }
 
 -(void)insertTextAnnotation:(NSString*)text
