@@ -29,8 +29,7 @@
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender
 {
     //    NSLog(@"%@",NSStringFromSelector(action));
-    return YES;
-    if(action == @selector(cut:) || action == @selector(copy:) || action == @selector(myCut:)|| action == @selector(myPaste:)) return YES;
+//    if(action == @selector(cut:) || action == @selector(copy:) || action == @selector(myCut:)|| action == @selector(myPaste:)) return YES;
     return NO;
 }
 
