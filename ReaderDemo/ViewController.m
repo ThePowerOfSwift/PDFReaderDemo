@@ -41,7 +41,7 @@
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction:)];
     [self.view addGestureRecognizer:tap];
     
-    UITapGestureRecognizer * doubleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(doubleTapAction)];
+    UITapGestureRecognizer * doubleTap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(doubleTapAction:)];
     doubleTap.numberOfTapsRequired = 2;
     [self.view addGestureRecognizer:doubleTap];
     
@@ -61,18 +61,22 @@
     }
     else
     {
+        CGPoint touchPoint = [longGes locationInView:self.view];
+
         [self.testView removeFromSuperview];
         self.testView = [[LLTestView alloc]init];
-        self.testView.frame = CGRectMake(0, 0, 70, 40);
+        CGFloat width = 70;
+        CGFloat height = 40;
+        self.testView.frame = CGRectMake(touchPoint.x - width/2, touchPoint.y - height/2, width, height);
         [self.view addSubview:self.testView];
+        self.testView.backgroundColor = [UIColor greenColor];
 
         [self.testView becomeFirstResponder];
-        UIMenuItem * item1 = [[UIMenuItem alloc]initWithTitle:@"插入文本框" action:@selector(insertTextWidget:)];
-        UIMenuItem * item2 = [[UIMenuItem alloc]initWithTitle:@"粘贴" action:@selector(insertTextWidget:)];
+        UIMenuItem * item1 = [[UIMenuItem alloc]initWithTitle:@"插入文本框" action:@selector(insertTextWidget)];
+        UIMenuItem * item2 = [[UIMenuItem alloc]initWithTitle:@"粘贴" action:@selector(insertTextWidget)];
         menu.menuItems = @[item1,item2];
         
-        CGPoint touchPoint = [longGes locationInView:self.testView];
-        [menu setTargetRect:CGRectMake(touchPoint.x, touchPoint.y, 80, 50) inView:self.testView];
+        [menu setTargetRect:CGRectMake(touchPoint.x - width/2, touchPoint.y - height/2, 80, 50) inView:self.testView];
         
         [menu setMenuVisible:YES animated:YES];
     }
@@ -102,14 +106,13 @@
 
 
 //PDFAnnotationSubtypeWidget
--(void)insertTextWidget:(UIMenuController *)menu
+-(void)insertTextWidget
 {
     [self.testView removeFromSuperview];
 
-    CGPoint location = menu.menuFrame.origin;
     PDFPage * page = self.pdfview.currentPage;
     
-    CGRect frame = CGRectMake(location.x, location.y, 100, 40);
+    CGRect frame = self.testView.frame;
     CGRect textFrameInPDF = [self.pdfview convertRect:frame toPage:page];
     
     PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeWidget withProperties:nil];
@@ -148,20 +151,47 @@
     return rect;
 }
 
--(void)doubleTapAction
+-(void)doubleTapAction:(UIGestureRecognizer*)ges
 {
     NSLog(@"%s",__func__);
     
-    [self.textField removeFromSuperview];
-    
-    PDFPage * page = self.pdfview.currentPage;
-    
-    NSArray<PDFAnnotation*>* annotationArray = [page annotations];
-    
-    NSLog(@"%@",annotationArray);
-    for (PDFAnnotation * annotation in annotationArray) {
-        NSLog(@"%@",annotation.fieldName);
+    UIMenuController * menu = [UIMenuController sharedMenuController];
+    if (menu.menuVisible) {
+        [menu setMenuVisible:NO];
+        [self.testView removeFromSuperview];
     }
+    else
+    {
+        CGPoint touchPoint = [ges locationInView:self.view];
+        
+        [self.testView removeFromSuperview];
+        self.testView = [[LLTestView alloc]init];
+        CGFloat width = 70;
+        CGFloat height = 40;
+        self.testView.frame = CGRectMake(touchPoint.x - width/2, touchPoint.y - height/2, width, height);
+        [self.view addSubview:self.testView];
+        self.testView.backgroundColor = [UIColor greenColor];
+        
+        [self.testView becomeFirstResponder];
+        UIMenuItem * item1 = [[UIMenuItem alloc]initWithTitle:@"插入文本框" action:@selector(insertTextWidget)];
+        UIMenuItem * item2 = [[UIMenuItem alloc]initWithTitle:@"粘贴" action:@selector(insertTextWidget)];
+        menu.menuItems = @[item1,item2];
+        
+        [menu setTargetRect:CGRectMake(0, 0, 80, 50) inView:self.testView];
+        
+        [menu setMenuVisible:YES animated:YES];
+    }
+
+//    [self.textField removeFromSuperview];
+//
+//    PDFPage * page = self.pdfview.currentPage;
+//
+//    NSArray<PDFAnnotation*>* annotationArray = [page annotations];
+//
+//    NSLog(@"%@",annotationArray);
+//    for (PDFAnnotation * annotation in annotationArray) {
+//        NSLog(@"%@",annotation.fieldName);
+//    }
 }
 
 -(void)insertCircle
