@@ -51,9 +51,9 @@
     [self.view addGestureRecognizer:longGes];
     [tap requireGestureRecognizerToFail:longGes];
     
-    self.testView = [[LLTestView alloc]init];
-    self.testView.frame = CGRectMake(0, 0, screenSize.width, screenSize.height);
-    [self.view addSubview:self.testView];
+//    self.testView = [[LLTestView alloc]init];
+//    self.testView.frame = CGRectMake(0, 0, screenSize.width, screenSize.height);
+//    [self.view addSubview:self.testView];
 }
 
 -(void)longPress:(UILongPressGestureRecognizer*)longGes
@@ -80,7 +80,7 @@
 -(void)tapAction:(UITapGestureRecognizer*)tapGes
 {
     
-//    [self insertWidget];
+    [self insertTextWidget];
     /*
     //接下来做tap输入文字
     [self.textField removeFromSuperview];
@@ -97,6 +97,8 @@
     [self insertTextAnnotation:textField.text];
     return YES;
 }
+
+
 
 //PDFAnnotationSubtypeWidget
 -(void)insertTextWidget:(UIMenuController *)menu
