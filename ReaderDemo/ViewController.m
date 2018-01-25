@@ -50,10 +50,6 @@
     UILongPressGestureRecognizer * longGes = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
     [self.view addGestureRecognizer:longGes];
     [tap requireGestureRecognizerToFail:longGes];
-    
-//    self.testView = [[LLTestView alloc]init];
-//    self.testView.frame = CGRectMake(0, 0, screenSize.width, screenSize.height);
-//    [self.view addSubview:self.testView];
 }
 
 -(void)longPress:(UILongPressGestureRecognizer*)longGes
@@ -61,10 +57,15 @@
     UIMenuController * menu = [UIMenuController sharedMenuController];
     if (menu.menuVisible) {
         [menu setMenuVisible:NO];
-        [self.testView resignFirstResponder];
+        [self.testView removeFromSuperview];
     }
     else
     {
+        [self.testView removeFromSuperview];
+        self.testView = [[LLTestView alloc]init];
+        self.testView.frame = CGRectMake(0, 0, 70, 40);
+        [self.view addSubview:self.testView];
+
         [self.testView becomeFirstResponder];
         UIMenuItem * item1 = [[UIMenuItem alloc]initWithTitle:@"插入文本框" action:@selector(insertTextWidget:)];
         UIMenuItem * item2 = [[UIMenuItem alloc]initWithTitle:@"粘贴" action:@selector(insertTextWidget:)];
@@ -80,7 +81,7 @@
 -(void)tapAction:(UITapGestureRecognizer*)tapGes
 {
     
-    [self insertTextWidget];
+//    [self insertTextWidget];
     /*
     //接下来做tap输入文字
     [self.textField removeFromSuperview];
@@ -103,6 +104,8 @@
 //PDFAnnotationSubtypeWidget
 -(void)insertTextWidget:(UIMenuController *)menu
 {
+    [self.testView removeFromSuperview];
+
     CGPoint location = menu.menuFrame.origin;
     PDFPage * page = self.pdfview.currentPage;
     
