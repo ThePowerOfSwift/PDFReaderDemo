@@ -44,45 +44,15 @@
     [self.view addGestureRecognizer:doubleTap];
     
     [tap requireGestureRecognizerToFail:doubleTap];
-    
-    UILongPressGestureRecognizer * longGes = [[UILongPressGestureRecognizer alloc]initWithTarget:self action:@selector(longPress:)];
-    [self.view addGestureRecognizer:longGes];
-    [tap requireGestureRecognizerToFail:longGes];
 }
 
--(void)longPress:(UILongPressGestureRecognizer*)longGes
-{
-    UIMenuController * menu = [UIMenuController sharedMenuController];
-    if (menu.menuVisible) {
-        [menu setMenuVisible:NO];
-        [self.testView removeFromSuperview];
-    }
-    else
-    {
-        CGPoint touchPoint = [longGes locationInView:self.view];
-
-        [self.testView removeFromSuperview];
-        self.testView = [[LLTestView alloc]init];
-        CGFloat width = 70;
-        CGFloat height = 40;
-        self.testView.frame = CGRectMake(touchPoint.x - width/2, touchPoint.y - height/2, width, height);
-        [self.view addSubview:self.testView];
-        self.testView.backgroundColor = [UIColor greenColor];
-
-        [self.testView becomeFirstResponder];
-        UIMenuItem * item1 = [[UIMenuItem alloc]initWithTitle:@"插入文本框" action:@selector(insertTextWidget)];
-        UIMenuItem * item2 = [[UIMenuItem alloc]initWithTitle:@"粘贴" action:@selector(insertTextWidget)];
-        menu.menuItems = @[item1,item2];
-        
-        [menu setTargetRect:CGRectMake(touchPoint.x - width/2, touchPoint.y - height/2, 80, 50) inView:self.testView];
-        
-        [menu setMenuVisible:YES animated:YES];
-    }
-}
 
 -(void)tapAction:(UITapGestureRecognizer*)tapGes
 {
+    UIMenuController * menu = [UIMenuController sharedMenuController];
+    [menu setMenuVisible:NO];
     
+    [self.testView removeFromSuperview];
 //    [self insertTextWidget];
     /*
     //接下来做tap输入文字
@@ -93,35 +63,6 @@
     [self.textField becomeFirstResponder];
     self.textField.delegate = self;
     */
-}
-
-
-//PDFAnnotationSubtypeWidget
--(void)insertTextWidget
-{
-    [self.testView removeFromSuperview];
-
-    PDFPage * page = self.pdfview.currentPage;
-    
-    CGRect frame = self.testView.frame;
-    CGRect textFrameInPDF = [self.pdfview convertRect:frame toPage:page];
-    
-    PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeWidget withProperties:nil];
-    annotation.font = [UIFont systemFontOfSize:28];
-    annotation.widgetFieldType = PDFAnnotationWidgetSubtypeText;
-    annotation.alignment = NSTextAlignmentCenter;
-    annotation.backgroundColor = [UIColor orangeColor];
-    [page addAnnotation:annotation];
-    [self.pdfview setNeedsDisplay];
-}
-
--(CGRect)converRect:(CGRect)rect fromInSize:(CGSize)originalSize toInSize:(CGSize)targetSize
-{
-    rect.size.width *= targetSize.width/originalSize.width;
-    rect.size.height *= targetSize.height/originalSize.height;
-    rect.origin.x *= targetSize.width/originalSize.width;
-    rect.origin.y *= targetSize.height/originalSize.height;
-    return rect;
 }
 
 -(void)doubleTapAction:(UIGestureRecognizer*)ges
@@ -167,18 +108,42 @@
 //    }
 }
 
+//PDFAnnotationSubtypeWidget
+-(void)insertTextWidget
+{
+    [self.testView removeFromSuperview];
+    
+    PDFPage * page = self.pdfview.currentPage;
+    
+    CGRect frame = self.testView.frame;
+    CGRect textFrameInPDF = [self.pdfview convertRect:frame toPage:page];
+    
+    PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeWidget withProperties:nil];
+    annotation.font = [UIFont systemFontOfSize:28];
+    annotation.widgetFieldType = PDFAnnotationWidgetSubtypeText;
+    annotation.alignment = NSTextAlignmentCenter;
+    annotation.backgroundColor = [UIColor orangeColor];
+    [page addAnnotation:annotation];
+    [self.pdfview setNeedsDisplay];
+}
+
 -(void)insertText
 {
+    [self.testView removeFromSuperview];
+
     __weak typeof(self) weakSelf = self;
-    UIAlertController * alert = [[UIAlertController alloc]init];
+    UIAlertController * alert = [UIAlertController alertControllerWithTitle:@"输入要插入的文本" message:nil preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction * sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
         UITextField * textField = [[alert textFields] firstObject];
         
+        NSString * string = textField.text;
+        CGSize sizeOfString = [string sizeWithAttributes:@{NSFontAttributeName:[UIFont systemFontOfSize:14]}];
         PDFPage * page = weakSelf.pdfview.currentPage;
         CGRect frame = weakSelf.testView.frame;
+        frame.size = sizeOfString;
         CGRect textFrameInPDF = [weakSelf.pdfview convertRect:frame toPage:page];
         PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeFreeText withProperties:nil];
-        annotation.font = [UIFont systemFontOfSize:28];
+        annotation.font = [UIFont systemFontOfSize:14];
         annotation.contents = textField.text;
         annotation.alignment = NSTextAlignmentCenter;
         [page addAnnotation:annotation];
