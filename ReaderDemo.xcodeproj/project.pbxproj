@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		6A75D97C20146B2C004CA597 /* sample.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6A75D97B20146B2C004CA597 /* sample.pdf */; };
 		6A75D97F201482B5004CA597 /* 3测试2.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6A75D97E201482B5004CA597 /* 3测试2.pdf */; };
+		6ABAC145201B5A6800296532 /* LLToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ABAC144201B5A6800296532 /* LLToolBar.m */; };
+		6ABAC147201B5BCA00296532 /* LLToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ABAC146201B5BCA00296532 /* LLToolBar.xib */; };
+		6ABAC14B201B5F9C00296532 /* OutlineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ABAC149201B5F9C00296532 /* OutlineController.m */; };
+		6ABAC14C201B5F9C00296532 /* OutlineController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ABAC14A201B5F9C00296532 /* OutlineController.xib */; };
 		6AD897ED2018C1F400841E61 /* LLTestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD897EC2018C1F400841E61 /* LLTestView.m */; };
 		6AF512FF2013232D00D9675E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF512FE2013232D00D9675E /* AppDelegate.m */; };
 		6AF513022013232D00D9675E /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF513012013232D00D9675E /* ViewController.m */; };
@@ -21,6 +25,12 @@
 /* Begin PBXFileReference section */
 		6A75D97B20146B2C004CA597 /* sample.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = sample.pdf; sourceTree = "<group>"; };
 		6A75D97E201482B5004CA597 /* 3测试2.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = "3测试2.pdf"; sourceTree = "<group>"; };
+		6ABAC143201B5A6800296532 /* LLToolBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLToolBar.h; sourceTree = "<group>"; };
+		6ABAC144201B5A6800296532 /* LLToolBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLToolBar.m; sourceTree = "<group>"; };
+		6ABAC146201B5BCA00296532 /* LLToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LLToolBar.xib; sourceTree = "<group>"; };
+		6ABAC148201B5F9C00296532 /* OutlineController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OutlineController.h; sourceTree = "<group>"; };
+		6ABAC149201B5F9C00296532 /* OutlineController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = OutlineController.m; sourceTree = "<group>"; };
+		6ABAC14A201B5F9C00296532 /* OutlineController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = OutlineController.xib; sourceTree = "<group>"; };
 		6AD897EB2018C1F400841E61 /* LLTestView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLTestView.h; sourceTree = "<group>"; };
 		6AD897EC2018C1F400841E61 /* LLTestView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLTestView.m; sourceTree = "<group>"; };
 		6AF512FA2013232D00D9675E /* ReaderDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ReaderDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -78,6 +88,12 @@
 				6AF5130C2013232D00D9675E /* main.m */,
 				6AD897EB2018C1F400841E61 /* LLTestView.h */,
 				6AD897EC2018C1F400841E61 /* LLTestView.m */,
+				6ABAC143201B5A6800296532 /* LLToolBar.h */,
+				6ABAC144201B5A6800296532 /* LLToolBar.m */,
+				6ABAC146201B5BCA00296532 /* LLToolBar.xib */,
+				6ABAC148201B5F9C00296532 /* OutlineController.h */,
+				6ABAC149201B5F9C00296532 /* OutlineController.m */,
+				6ABAC14A201B5F9C00296532 /* OutlineController.xib */,
 			);
 			path = ReaderDemo;
 			sourceTree = "<group>";
@@ -141,6 +157,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6AF5130A2013232D00D9675E /* LaunchScreen.storyboard in Resources */,
+				6ABAC147201B5BCA00296532 /* LLToolBar.xib in Resources */,
+				6ABAC14C201B5F9C00296532 /* OutlineController.xib in Resources */,
 				6AF513072013232D00D9675E /* Assets.xcassets in Resources */,
 				6AF513052013232D00D9675E /* Main.storyboard in Resources */,
 				6A75D97F201482B5004CA597 /* 3测试2.pdf in Resources */,
@@ -157,7 +175,9 @@
 			files = (
 				6AF513022013232D00D9675E /* ViewController.m in Sources */,
 				6AF5130D2013232D00D9675E /* main.m in Sources */,
+				6ABAC145201B5A6800296532 /* LLToolBar.m in Sources */,
 				6AD897ED2018C1F400841E61 /* LLTestView.m in Sources */,
+				6ABAC14B201B5F9C00296532 /* OutlineController.m in Sources */,
 				6AF512FF2013232D00D9675E /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

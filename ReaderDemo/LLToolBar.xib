@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="LLToolBar">
+            <rect key="frame" x="0.0" y="0.0" width="579" height="104"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lAK-6d-ACc">
+                    <rect key="frame" x="0.0" y="0.0" width="145" height="104"/>
+                    <state key="normal" title="列表"/>
+                    <connections>
+                        <action selector="outlineAction:" destination="iN0-l3-epB" eventType="touchUpInside" id="PhR-BD-YPR"/>
+                    </connections>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DCH-dd-5tQ">
+                    <rect key="frame" x="145" y="0.0" width="144.5" height="104"/>
+                    <state key="normal" title="阅读"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xNu-8O-lbP">
+                    <rect key="frame" x="289.5" y="0.0" width="145" height="104"/>
+                    <state key="normal" title="注释"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wlO-Wd-VyR">
+                    <rect key="frame" x="434.5" y="0.0" width="144.5" height="104"/>
+                    <state key="normal" title="签名"/>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="xNu-8O-lbP" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="1HX-Pm-byD"/>
+                <constraint firstItem="DCH-dd-5tQ" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="Ck1-5a-Kez"/>
+                <constraint firstItem="wlO-Wd-VyR" firstAttribute="leading" secondItem="xNu-8O-lbP" secondAttribute="trailing" id="GGg-mX-YqY"/>
+                <constraint firstItem="lAK-6d-ACc" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="GKh-Mj-KRM"/>
+                <constraint firstItem="wlO-Wd-VyR" firstAttribute="top" secondItem="vUN-kp-3ea" secondAttribute="top" id="JoM-fT-XvS"/>
+                <constraint firstItem="xNu-8O-lbP" firstAttribute="leading" secondItem="DCH-dd-5tQ" secondAttribute="trailing" id="KE1-y4-ygB"/>
+                <constraint firstItem="DCH-dd-5tQ" firstAttribute="leading" secondItem="lAK-6d-ACc" secondAttribute="trailing" id="UXH-4P-RT0"/>
+                <constraint firstItem="DCH-dd-5tQ" firstAttribute="height" secondItem="lAK-6d-ACc" secondAttribute="height" id="Vt0-MD-baL"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="xNu-8O-lbP" secondAttribute="bottom" id="XW1-kQ-Xb5"/>
+                <constraint firstItem="lAK-6d-ACc" firstAttribute="leading" secondItem="vUN-kp-3ea" secondAttribute="leading" id="dfQ-ri-app"/>
+                <constraint firstItem="wlO-Wd-VyR" firstAttribute="width" secondItem="lAK-6d-ACc" secondAttribute="width" id="fvJ-rr-3bb"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="DCH-dd-5tQ" secondAttribute="bottom" id="i5W-zQ-S8m"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="lAK-6d-ACc" secondAttribute="bottom" id="i5Z-B4-vYh"/>
+                <constraint firstItem="DCH-dd-5tQ" firstAttribute="width" secondItem="lAK-6d-ACc" secondAttribute="width" id="jgf-jF-nU6"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="trailing" secondItem="wlO-Wd-VyR" secondAttribute="trailing" id="kzw-II-CSJ"/>
+                <constraint firstItem="wlO-Wd-VyR" firstAttribute="height" secondItem="lAK-6d-ACc" secondAttribute="height" id="nub-i1-Mkn"/>
+                <constraint firstItem="xNu-8O-lbP" firstAttribute="width" secondItem="lAK-6d-ACc" secondAttribute="width" id="p0f-nJ-4JP"/>
+                <constraint firstItem="xNu-8O-lbP" firstAttribute="height" secondItem="lAK-6d-ACc" secondAttribute="height" id="sHg-FA-dgQ"/>
+                <constraint firstItem="vUN-kp-3ea" firstAttribute="bottom" secondItem="wlO-Wd-VyR" secondAttribute="bottom" id="yPF-Bb-dAh"/>
+            </constraints>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <viewLayoutGuide key="safeArea" id="vUN-kp-3ea"/>
+            <connections>
+                <outlet property="annotateB" destination="xNu-8O-lbP" id="MBi-DF-uUW"/>
+                <outlet property="listB" destination="lAK-6d-ACc" id="nqa-g5-ujN"/>
+                <outlet property="readB" destination="DCH-dd-5tQ" id="ZbD-8m-SQx"/>
+                <outlet property="signB" destination="wlO-Wd-VyR" id="jej-n0-Uof"/>
+            </connections>
+            <point key="canvasLocation" x="12.5" y="167"/>
+        </view>
+    </objects>
+</document>
