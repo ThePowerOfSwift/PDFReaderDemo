@@ -9,12 +9,16 @@
 #import "ViewController.h"
 #import <PDFKit/PDFKit.h>
 #import "LLTestView.h"
+#import "LLToolBar.h"
+#import "OutlineController.h"
 
-@interface ViewController ()
+@interface ViewController ()<LLToolBarProctol>
 
 @property(nonatomic,strong)PDFView * pdfview;
 
 @property(nonatomic,strong)LLTestView * testView;
+
+@property(nonatomic,strong)LLToolBar * toolBar;
 
 @end
 
@@ -23,11 +27,16 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    CGFloat heightOfTool = 100;
+    
     PDFView * pdfview = [[PDFView alloc]init];
     self.pdfview = pdfview;
+    pdfview.displayMode = kPDFDisplaySinglePageContinuous;
+    pdfview.displayDirection = kPDFDisplayDirectionHorizontal;
     CGSize screenSize = [UIScreen mainScreen].bounds.size;
-    pdfview.frame = CGRectMake(0, 0, screenSize.width, screenSize.height);
+    pdfview.frame = CGRectMake(0, 0, screenSize.width, screenSize.height - heightOfTool);
     [self.view addSubview:pdfview];
+    [pdfview usePageViewController:YES withViewOptions:nil];
     
     NSURL * url = [[NSBundle mainBundle] URLForResource:@"sample" withExtension:@"pdf"];
     PDFDocument * pdfdocument = [[PDFDocument alloc]initWithURL:url];
@@ -35,6 +44,10 @@
     pdfview.document = pdfdocument;
     pdfview.displayMode = kPDFDisplaySinglePageContinuous;
     pdfview.autoScales = true;
+    
+    self.toolBar = [LLToolBar toolBarWithDelegate:self];
+    [self.view addSubview:self.toolBar];
+    self.toolBar.frame = CGRectMake(0, screenSize.height - heightOfTool, screenSize.width, heightOfTool);
     
     UITapGestureRecognizer * tap = [[UITapGestureRecognizer alloc]initWithTarget:self action:@selector(tapAction:)];
     [self.view addGestureRecognizer:tap];
@@ -46,6 +59,21 @@
     [tap requireGestureRecognizerToFail:doubleTap];
 }
 
+-(void)outlineAction
+{
+    PDFPage * page = self.pdfview.currentPage;
+    
+    NSArray<PDFAnnotation*>* annotationArray = [page annotations];
+    
+    NSLog(@"%@",annotationArray);
+    for (PDFAnnotation * annotation in annotationArray) {
+        NSLog(@"%@",annotation.fieldName);
+    }
+    
+    OutlineController * control = [[OutlineController alloc]init];
+    control.annotationArray = annotationArray;
+    [self presentViewController:control animated:YES completion:nil];
+}
 
 -(void)tapAction:(UITapGestureRecognizer*)tapGes
 {
@@ -95,17 +123,6 @@
         
         [menu setMenuVisible:YES animated:YES];
     }
-
-//    [self.textField removeFromSuperview];
-//
-//    PDFPage * page = self.pdfview.currentPage;
-//
-//    NSArray<PDFAnnotation*>* annotationArray = [page annotations];
-//
-//    NSLog(@"%@",annotationArray);
-//    for (PDFAnnotation * annotation in annotationArray) {
-//        NSLog(@"%@",annotation.fieldName);
-//    }
 }
 
 //PDFAnnotationSubtypeWidget
