@@ -10,11 +10,9 @@
 #import <PDFKit/PDFKit.h>
 #import "LLTestView.h"
 
-@interface ViewController ()<UITextFieldDelegate>
+@interface ViewController ()
 
 @property(nonatomic,strong)PDFView * pdfview;
-
-@property(nonatomic,strong)UITextField * textField;
 
 @property(nonatomic,strong)LLTestView * testView;
 
@@ -97,13 +95,6 @@
     */
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField
-{
-    [self insertTextAnnotation:textField.text];
-    return YES;
-}
-
-
 
 //PDFAnnotationSubtypeWidget
 -(void)insertTextWidget
@@ -118,24 +109,6 @@
     PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeWidget withProperties:nil];
     annotation.font = [UIFont systemFontOfSize:28];
     annotation.widgetFieldType = PDFAnnotationWidgetSubtypeText;
-    annotation.alignment = NSTextAlignmentCenter;
-    annotation.backgroundColor = [UIColor orangeColor];
-    [page addAnnotation:annotation];
-    [self.pdfview setNeedsDisplay];
-}
-
--(void)insertTextAnnotation:(NSString*)text
-{
-    PDFPage * page = self.pdfview.currentPage;
-    
-    CGRect frame = self.textField.frame;
-    CGRect textFrameInPDF = [self.pdfview convertRect:frame toPage:page];
-    
-    
-    
-    PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeFreeText withProperties:nil];
-    annotation.font = [UIFont systemFontOfSize:28];
-    annotation.contents = text;
     annotation.alignment = NSTextAlignmentCenter;
     annotation.backgroundColor = [UIColor orangeColor];
     [page addAnnotation:annotation];
@@ -173,8 +146,8 @@
         self.testView.backgroundColor = [UIColor greenColor];
         
         [self.testView becomeFirstResponder];
-        UIMenuItem * item1 = [[UIMenuItem alloc]initWithTitle:@"插入文本框" action:@selector(insertTextWidget)];
-        UIMenuItem * item2 = [[UIMenuItem alloc]initWithTitle:@"粘贴" action:@selector(insertTextWidget)];
+        UIMenuItem * item1 = [[UIMenuItem alloc]initWithTitle:@"TextWidget" action:@selector(insertTextWidget)];
+        UIMenuItem * item2 = [[UIMenuItem alloc]initWithTitle:@"Text" action:@selector(insertText)];
         menu.menuItems = @[item1,item2];
         
         [menu setTargetRect:CGRectMake(0, 0, 80, 50) inView:self.testView];
@@ -192,6 +165,36 @@
 //    for (PDFAnnotation * annotation in annotationArray) {
 //        NSLog(@"%@",annotation.fieldName);
 //    }
+}
+
+-(void)insertText
+{
+    __weak typeof(self) weakSelf = self;
+    UIAlertController * alert = [[UIAlertController alloc]init];
+    UIAlertAction * sureAction = [UIAlertAction actionWithTitle:@"确定" style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UITextField * textField = [[alert textFields] firstObject];
+        
+        PDFPage * page = weakSelf.pdfview.currentPage;
+        CGRect frame = weakSelf.testView.frame;
+        CGRect textFrameInPDF = [weakSelf.pdfview convertRect:frame toPage:page];
+        PDFAnnotation * annotation = [[PDFAnnotation alloc]initWithBounds:textFrameInPDF forType:PDFAnnotationSubtypeFreeText withProperties:nil];
+        annotation.font = [UIFont systemFontOfSize:28];
+        annotation.contents = textField.text;
+        annotation.alignment = NSTextAlignmentCenter;
+        [page addAnnotation:annotation];
+        [self.pdfview setNeedsDisplay];
+
+    }];
+    UIAlertAction * cancleAction = [UIAlertAction actionWithTitle:@"取消" style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+        //
+    }];
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = @"输入文本";
+    }];
+    
+    [alert addAction:cancleAction];
+    [alert addAction:sureAction];
+    [self presentViewController:alert animated:YES completion:nil];
 }
 
 -(void)insertCircle
