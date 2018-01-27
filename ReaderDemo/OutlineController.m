@@ -7,6 +7,7 @@
 //
 
 #import "OutlineController.h"
+#import "LLTextCell.h"
 
 @interface OutlineController ()<UITableViewDelegate,UITableViewDataSource>
 @property (weak, nonatomic) IBOutlet UIView *contentView;
