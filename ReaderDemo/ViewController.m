@@ -11,10 +11,11 @@
 #import "LLTestView.h"
 #import "LLToolBar.h"
 #import "OutlineController.h"
+#import "LLPDFView.h"
 
 @interface ViewController ()<LLToolBarProctol>
 
-@property(nonatomic,strong)PDFView * pdfview;
+@property(nonatomic,strong)LLPDFView * pdfview;
 
 @property(nonatomic,strong)LLTestView * testView;
 
@@ -29,7 +30,7 @@
     
     CGFloat heightOfTool = 100;
     
-    PDFView * pdfview = [[PDFView alloc]init];
+    LLPDFView * pdfview = [[LLPDFView alloc]init];
     self.pdfview = pdfview;
     pdfview.displayMode = kPDFDisplaySinglePageContinuous;
     pdfview.displayDirection = kPDFDisplayDirectionHorizontal;
@@ -95,6 +96,11 @@
     [menu setMenuVisible:NO];
     
     [self.testView removeFromSuperview];
+    
+    NSArray<PDFAnnotation*>* array = [self.pdfview.currentPage annotations];
+    PDFAnnotation * annotate = [array firstObject];
+    self.pdfview.activeAnnotate = annotate;
+    [self.pdfview setNeedsDisplay];
 //    [self insertTextWidget];
     /*
     //接下来做tap输入文字
