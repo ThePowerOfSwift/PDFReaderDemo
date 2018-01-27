@@ -35,7 +35,7 @@
     self.tableView.frame = self.contentView.bounds;
 }
 
--(void)setAnnotationArray:(NSArray<PDFAnnotation *> *)annotationArray
+-(void)setAnnotationArray:(NSArray<NSArray<PDFAnnotation *> *> *)annotationArray
 {
     _annotationArray = annotationArray;
     
@@ -50,6 +50,7 @@
         _tableView.dataSource = self;
         _tableView.rowHeight = 70;
         [_tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
+        _tableView.tableFooterView = [[UIView alloc]init];
         [self.contentView addSubview:_tableView];
     }
     return _tableView;
@@ -63,18 +64,28 @@
 #pragma mark UITableViewDataSource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return 1;
+    return self.annotationArray.count;
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return self.annotationArray.count;
+    return self.annotationArray[section].count;
 }
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     UITableViewCell * cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
-    cell.textLabel.text = self.annotationArray[indexPath.row].type;
+    cell.textLabel.text = self.annotationArray[indexPath.section][indexPath.row].type;
     return cell;
+}
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+{
+    return 12;
+}
+
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
+{
+    return @(section).stringValue;
 }
 @end

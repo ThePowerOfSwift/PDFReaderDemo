@@ -61,18 +61,32 @@
 
 -(void)outlineAction
 {
-    PDFPage * page = self.pdfview.currentPage;
-    
-    NSArray<PDFAnnotation*>* annotationArray = [page annotations];
-    
-    NSLog(@"%@",annotationArray);
-    for (PDFAnnotation * annotation in annotationArray) {
-        NSLog(@"%@",annotation.fieldName);
+    NSMutableArray<NSArray<PDFAnnotation*>*>* annotationArr = [NSMutableArray array];
+    NSArray<PDFPage*>* pageArray = [self allPageInDoc:self.pdfview.document];
+    for (PDFPage * page in pageArray) {
+        NSArray<PDFAnnotation*>* array = [page annotations];
+        
+        NSLog(@"%@",array);
+        for (PDFAnnotation * annotation in array) {
+            NSLog(@"%@",annotation.fieldName);
+        }
+        
+        [annotationArr addObject:array];
     }
     
     OutlineController * control = [[OutlineController alloc]init];
-    control.annotationArray = annotationArray;
+    control.annotationArray = annotationArr;
     [self presentViewController:control animated:YES completion:nil];
+}
+
+-(NSArray<PDFPage*>*)allPageInDoc:(PDFDocument*)document
+{
+    NSMutableArray<PDFPage*>* pageArr = [NSMutableArray array];
+    for (int i = 0; i < document.pageCount; i++) {
+        PDFPage * page = [document pageAtIndex:i];
+        [pageArr addObject:page];
+    }
+    return pageArr;
 }
 
 -(void)tapAction:(UITapGestureRecognizer*)tapGes

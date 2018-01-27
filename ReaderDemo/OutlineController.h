@@ -11,6 +11,5 @@
 
 @interface OutlineController : UIViewController
 
-@property(nonatomic,strong)NSArray<PDFAnnotation*>* annotationArray;
-
+@property(nonatomic,strong)NSArray<NSArray<PDFAnnotation*>*>* annotationArray;
 @end
