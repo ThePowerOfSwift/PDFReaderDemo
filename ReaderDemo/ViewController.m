@@ -65,6 +65,83 @@
     [pan requireGestureRecognizerToFail:doubleTap];
 }
 
+#pragma mark 点击选中annotate
+-(void)tapAction:(UITapGestureRecognizer*)ges
+{
+    UIMenuController * menu = [UIMenuController sharedMenuController];
+    [menu setMenuVisible:NO];
+    
+    [self.testView removeFromSuperview];
+    
+    CGPoint locationInPDFView = [ges locationInView:self.pdfview];
+    CGPoint locationInPDF = [self.pdfview convertPoint:locationInPDFView toPage:self.pdfview.currentPage];
+    
+    BOOL haveHit = NO;
+    NSArray<PDFAnnotation*>* array = [self.pdfview.currentPage annotations];
+    for (PDFAnnotation * annotate in array) {
+        BOOL isHit = CGRectContainsPoint(annotate.bounds, locationInPDF);
+        if (isHit) {
+            if ([self.pdfview.activeAnnotate isEqual:annotate]) {
+                self.pdfview.activeAnnotate = nil;
+            }
+            else
+            {
+                self.pdfview.activeAnnotate = annotate;
+            }
+            [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
+            haveHit = YES;
+            break;
+        }
+    }
+    if (!haveHit) {
+        PDFAnnotation * annotate = self.pdfview.activeAnnotate;
+        self.pdfview.activeAnnotate = nil;
+        [self.pdfview setNeedsDisplayInRect:annotate.bounds];
+    }
+}
+
+#pragma mark 拖动annotate
+-(void)panAction:(UIPanGestureRecognizer*)ges
+{
+    if (ges.state == UIGestureRecognizerStateBegan) {
+        //是否在拖动当前annotate
+        CGPoint locationInPDFView = [ges locationInView:self.pdfview];
+        CGPoint locationInPDF = [self.pdfview convertPoint:locationInPDFView toPage:self.pdfview.currentPage];
+        CGRect activeFrame = self.pdfview.activeAnnotate.bounds;
+        self.pdfview.isMove = YES;
+        BOOL isHit = CGRectContainsPoint(activeFrame, locationInPDF);
+        if (isHit) {
+            //移动active annotate
+            self.pdfview.isMove = YES;
+            NSLog(@"hit annote %@",NSStringFromCGPoint(locationInPDF));
+        }
+        else
+        {
+            NSLog(@"没有hit annote");
+        }
+    }
+    else if (ges.state == UIGestureRecognizerStateChanged)
+    {
+        if (self.pdfview.isMove) {
+            CGPoint loactionInPDFView = [ges locationInView:self.pdfview];
+            CGPoint locationInPDF = [self.pdfview convertPoint:loactionInPDFView toPage:self.pdfview.currentPage];
+            self.pdfview.activeAnnotate.bounds = CGRectMake(self.pdfview.activeAnnotate.bounds.origin.x - CGRectGetMidX(self.pdfview.activeAnnotate.bounds) + locationInPDF.x, self.pdfview.activeAnnotate.bounds.origin.y - CGRectGetMidY(self.pdfview.activeAnnotate.bounds) + locationInPDF.y, self.pdfview.activeAnnotate.bounds.size.width, self.pdfview.activeAnnotate.bounds.size.height);
+            
+            [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
+        }
+        else
+        {
+            NSLog(@"没有hit annote move");
+        }
+    }
+    else if (ges.state == UIGestureRecognizerStateEnded || ges.state == UIGestureRecognizerStateCancelled)
+    {
+        NSLog(@"结束pan手势");
+        self.pdfview.isMove = NO;
+    }
+}
+
+#pragma mark 工具栏action
 -(void)outlineAction
 {
     NSMutableArray<NSArray<PDFAnnotation*>*>* annotationArr = [NSMutableArray array];
@@ -95,74 +172,7 @@
     return pageArr;
 }
 
--(void)tapAction:(UITapGestureRecognizer*)ges
-{
-    UIMenuController * menu = [UIMenuController sharedMenuController];
-    [menu setMenuVisible:NO];
-    
-    [self.testView removeFromSuperview];
-    
-    CGPoint locationInPDFView = [ges locationInView:self.pdfview];
-    CGPoint locationInPDF = [self.pdfview convertPoint:locationInPDFView toPage:self.pdfview.currentPage];
-
-    NSArray<PDFAnnotation*>* array = [self.pdfview.currentPage annotations];
-    for (PDFAnnotation * annotate in array) {
-        BOOL isHit = CGRectContainsPoint(annotate.bounds, locationInPDF);
-        if (isHit) {
-            if ([self.pdfview.activeAnnotate isEqual:annotate]) {
-                self.pdfview.activeAnnotate = nil;
-            }
-            else
-            {
-                self.pdfview.activeAnnotate = annotate;
-            }
-            [self.pdfview setNeedsDisplay];
-            break;
-        }
-    }
-}
-
--(void)panAction:(UIPanGestureRecognizer*)ges
-{
-    if (ges.state == UIGestureRecognizerStateBegan) {
-        //是否在拖动当前annotate
-        CGPoint locationInPDFView = [ges locationInView:self.pdfview];
-        CGPoint locationInPDF = [self.pdfview convertPoint:locationInPDFView toPage:self.pdfview.currentPage];
-        CGRect activeFrame = self.pdfview.activeAnnotate.bounds;
-        self.pdfview.isMove = YES;
-        BOOL isHit = CGRectContainsPoint(activeFrame, locationInPDF);
-        if (isHit) {
-            //移动active annotate
-            self.pdfview.isMove = YES;
-            NSLog(@"hit annote %@",NSStringFromCGPoint(locationInPDF));
-        }
-        else
-        {
-            //        [super touchesBegan:touches withEvent:event];
-            NSLog(@"没有hit annote");
-        }
-    }
-    else if (ges.state == UIGestureRecognizerStateChanged)
-    {
-        if (self.pdfview.isMove) {
-            CGPoint loactionInPDFView = [ges locationInView:self.pdfview];
-            CGPoint locationInPDF = [self.pdfview convertPoint:loactionInPDFView toPage:self.pdfview.currentPage];
-            self.pdfview.activeAnnotate.bounds = CGRectMake(self.pdfview.activeAnnotate.bounds.origin.x - CGRectGetMidX(self.pdfview.activeAnnotate.bounds) + locationInPDF.x, self.pdfview.activeAnnotate.bounds.origin.y - CGRectGetMidY(self.pdfview.activeAnnotate.bounds) + locationInPDF.y, self.pdfview.activeAnnotate.bounds.size.width, self.pdfview.activeAnnotate.bounds.size.height);
-            
-            [self.pdfview setNeedsDisplayInRect:CGRectMake(loactionInPDFView.x-10, loactionInPDFView.y-10, self.pdfview.activeAnnotate.bounds.size.width, self.pdfview.activeAnnotate.bounds.size.height)];
-        }
-        else
-        {
-            NSLog(@"没有hit annote move");
-        }
-    }
-    else if (ges.state == UIGestureRecognizerStateEnded || ges.state == UIGestureRecognizerStateCancelled)
-    {
-        NSLog(@"结束pan手势");
-        self.pdfview.isMove = NO;
-    }
-}
-
+#pragma mark 双击
 -(void)doubleTapAction:(UIGestureRecognizer*)ges
 {
     NSLog(@"%s",__func__);
@@ -195,6 +205,7 @@
     }
 }
 
+#pragma mark 插入annotate
 //PDFAnnotationSubtypeWidget
 -(void)insertTextWidget
 {
