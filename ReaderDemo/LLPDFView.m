@@ -8,6 +8,10 @@
 
 #import "LLPDFView.h"
 
+@interface LLPDFView()
+
+@end
+
 @implementation LLPDFView
 
 -(void)drawPage:(PDFPage *)page toContext:(CGContextRef)context
@@ -15,13 +19,13 @@
     [super drawPage:page toContext:context];
     
     if ([self.activeAnnotate.page isEqual:page]) {
-        if (CGSizeEqualToSize(CGSizeZero, self.bounds.size))
+        if (CGSizeEqualToSize(CGSizeZero, self.activeAnnotate.bounds.size))
             return;
         
         CGRect leftTop = CGRectMake(self.activeAnnotate.bounds.origin.x - 5, self.activeAnnotate.bounds.origin.y - 5, 10, 10);
-        CGRect rightTop = CGRectMake(self.activeAnnotate.bounds.origin.x + 5, self.activeAnnotate.bounds.origin.y - 5, 10, 10);
-        CGRect leftBottom = CGRectMake(self.activeAnnotate.bounds.origin.x - 5, self.activeAnnotate.bounds.origin.y + 5, 10, 10);
-        CGRect rightBottom = CGRectMake(self.activeAnnotate.bounds.origin.x + 5, self.activeAnnotate.bounds.origin.y + 5, 10, 10);
+        CGRect rightTop = CGRectMake(self.activeAnnotate.bounds.origin.x + self.activeAnnotate.bounds.size.width - 5, self.activeAnnotate.bounds.origin.y - 5, 10, 10);
+        CGRect leftBottom = CGRectMake(self.activeAnnotate.bounds.origin.x - 5, self.activeAnnotate.bounds.origin.y + self.activeAnnotate.bounds.size.height - 5, 10, 10);
+        CGRect rightBottom = CGRectMake(self.activeAnnotate.bounds.origin.x + self.activeAnnotate.bounds.size.width - 5, self.activeAnnotate.bounds.origin.y+ self.activeAnnotate.bounds.size.height - 5, 10, 10);
         CGFloat lineWidth = 3;
         CGColorRef color = [UIColor redColor].CGColor;
         
@@ -37,5 +41,4 @@
         CGContextRestoreGState(context);
     }
 }
-
 @end
