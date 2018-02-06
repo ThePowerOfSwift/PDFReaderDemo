@@ -16,6 +16,7 @@
 		6ABAC150201C83A500296532 /* LLTextCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ABAC14E201C83A500296532 /* LLTextCell.m */; };
 		6ABAC151201C83A500296532 /* LLTextCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 6ABAC14F201C83A500296532 /* LLTextCell.xib */; };
 		6ABAC15C201CAC3B00296532 /* LLPDFView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ABAC15B201CAC3B00296532 /* LLPDFView.m */; };
+		6ABF600320287A8900E29BCE /* LLOverlayView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6ABF600220287A8900E29BCE /* LLOverlayView.m */; };
 		6AC42687201F51A8006731C6 /* Document.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 6AC42686201F51A7006731C6 /* Document.pdf */; };
 		6AD897ED2018C1F400841E61 /* LLTestView.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AD897EC2018C1F400841E61 /* LLTestView.m */; };
 		6AF512FF2013232D00D9675E /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF512FE2013232D00D9675E /* AppDelegate.m */; };
@@ -40,6 +41,8 @@
 		6ABAC14F201C83A500296532 /* LLTextCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = LLTextCell.xib; sourceTree = "<group>"; };
 		6ABAC15A201CAC3B00296532 /* LLPDFView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLPDFView.h; sourceTree = "<group>"; };
 		6ABAC15B201CAC3B00296532 /* LLPDFView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLPDFView.m; sourceTree = "<group>"; };
+		6ABF600120287A8900E29BCE /* LLOverlayView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLOverlayView.h; sourceTree = "<group>"; };
+		6ABF600220287A8900E29BCE /* LLOverlayView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLOverlayView.m; sourceTree = "<group>"; };
 		6AC42686201F51A7006731C6 /* Document.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = Document.pdf; sourceTree = "<group>"; };
 		6AD897EB2018C1F400841E61 /* LLTestView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLTestView.h; sourceTree = "<group>"; };
 		6AD897EC2018C1F400841E61 /* LLTestView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLTestView.m; sourceTree = "<group>"; };
@@ -110,6 +113,8 @@
 				6ABAC14F201C83A500296532 /* LLTextCell.xib */,
 				6ABAC15A201CAC3B00296532 /* LLPDFView.h */,
 				6ABAC15B201CAC3B00296532 /* LLPDFView.m */,
+				6ABF600120287A8900E29BCE /* LLOverlayView.h */,
+				6ABF600220287A8900E29BCE /* LLOverlayView.m */,
 			);
 			path = ReaderDemo;
 			sourceTree = "<group>";
@@ -198,6 +203,7 @@
 				6ABAC145201B5A6800296532 /* LLToolBar.m in Sources */,
 				6AD897ED2018C1F400841E61 /* LLTestView.m in Sources */,
 				6ABAC14B201B5F9C00296532 /* OutlineController.m in Sources */,
+				6ABF600320287A8900E29BCE /* LLOverlayView.m in Sources */,
 				6AF512FF2013232D00D9675E /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

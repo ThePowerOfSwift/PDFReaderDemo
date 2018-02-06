@@ -13,6 +13,12 @@
 #import "OutlineController.h"
 #import "LLPDFView.h"
 
+typedef NS_ENUM(NSInteger, MoveType) {
+    MoveType_None = 0,
+    MoveType_Move = 1,
+    MoveType_Scale = 2,
+};
+
 @interface ViewController ()<LLToolBarProctol>
 
 @property(nonatomic,strong)LLPDFView * pdfview;
@@ -20,6 +26,10 @@
 @property(nonatomic,strong)LLTestView * testView;
 
 @property(nonatomic,strong)LLToolBar * toolBar;
+
+@property(nonatomic, assign)MoveType moveType;
+
+@property(nonatomic, assign) CGPoint lastTouchPoint;
 
 @end
 
@@ -107,40 +117,70 @@
         //是否在拖动当前annotate
         CGPoint locationInPDFView = [ges locationInView:self.pdfview];
         CGPoint locationInPDF = [self.pdfview convertPoint:locationInPDFView toPage:self.pdfview.currentPage];
-        CGRect activeFrame = self.pdfview.activeAnnotate.bounds;
-        self.pdfview.isMove = YES;
-        BOOL isHit = CGRectContainsPoint(activeFrame, locationInPDF);
-        if (isHit) {
-            //移动active annotate
-            self.pdfview.isMove = YES;
-            NSLog(@"hit annote %@",NSStringFromCGPoint(locationInPDF));
-        }
-        else
-        {
-            NSLog(@"没有hit annote");
-        }
+        self.moveType = [self moveType:locationInPDF annotate:self.pdfview.activeAnnotate inPDF:self.pdfview];
+        self.lastTouchPoint = locationInPDF;
     }
     else if (ges.state == UIGestureRecognizerStateChanged)
     {
-        if (self.pdfview.isMove) {
-            CGPoint loactionInPDFView = [ges locationInView:self.pdfview];
-            CGPoint locationInPDF = [self.pdfview convertPoint:loactionInPDFView toPage:self.pdfview.currentPage];
-            self.pdfview.activeAnnotate.bounds = CGRectMake(self.pdfview.activeAnnotate.bounds.origin.x - CGRectGetMidX(self.pdfview.activeAnnotate.bounds) + locationInPDF.x, self.pdfview.activeAnnotate.bounds.origin.y - CGRectGetMidY(self.pdfview.activeAnnotate.bounds) + locationInPDF.y, self.pdfview.activeAnnotate.bounds.size.width, self.pdfview.activeAnnotate.bounds.size.height);
-            
-            [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
-        }
-        else
-        {
-            NSLog(@"没有hit annote move");
+        CGPoint loactionInPDFView = [ges locationInView:self.pdfview];
+        CGPoint locationInPDF = [self.pdfview convertPoint:loactionInPDFView toPage:self.pdfview.currentPage];
+
+        switch (self.moveType) {
+            case MoveType_Move:
+            {
+                self.pdfview.activeAnnotate.bounds = CGRectMake(self.pdfview.activeAnnotate.bounds.origin.x - CGRectGetMidX(self.pdfview.activeAnnotate.bounds) + locationInPDF.x, self.pdfview.activeAnnotate.bounds.origin.y - CGRectGetMidY(self.pdfview.activeAnnotate.bounds) + locationInPDF.y, self.pdfview.activeAnnotate.bounds.size.width, self.pdfview.activeAnnotate.bounds.size.height);
+                
+                [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
+            }
+                break;
+            case MoveType_Scale:
+            {
+                CGSize scaleSize = CGSizeMake(locationInPDF.x - self.lastTouchPoint.x, locationInPDF.y - self.lastTouchPoint.y);
+                CGRect bounds = self.pdfview.activeAnnotate.bounds;
+                bounds.size = CGSizeMake(bounds.size.width + scaleSize.width, bounds.size.height + scaleSize.height);
+                self.pdfview.activeAnnotate.bounds = bounds;
+                [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
+                
+                self.lastTouchPoint = locationInPDF;
+            }
+                break;
+            case MoveType_None:
+            {
+                //
+            }
+                break;
         }
     }
     else if (ges.state == UIGestureRecognizerStateEnded || ges.state == UIGestureRecognizerStateCancelled)
     {
         NSLog(@"结束pan手势");
-        self.pdfview.isMove = NO;
+        self.moveType = MoveType_None;
     }
 }
 
+-(MoveType)moveType:(CGPoint)locationInPDF annotate:(PDFAnnotation*)annotate inPDF:(PDFView*)pdfview
+{
+    //1.检查是否命中周边缩放区域
+    CGFloat widthOfScale = [pdfview convertRect:CGRectMake(0, 0, 100, 100) toPage:self.pdfview.currentPage].size.width;
+    CGFloat originYOfScale = CGRectGetMaxY(annotate.bounds) - widthOfScale/2;
+    CGFloat originXOfScale = CGRectGetMaxX(annotate.bounds) - widthOfScale/2;
+    CGRect rectOfScale = CGRectMake(originXOfScale, originYOfScale, widthOfScale, widthOfScale);
+    
+    BOOL isHit = CGRectContainsPoint(rectOfScale, locationInPDF);
+    if (isHit) {
+        NSLog(@"判断为scale");
+        return MoveType_Scale;
+    }
+    
+    //2.检查是否命中annotate
+    isHit = CGRectContainsPoint(annotate.bounds, locationInPDF);
+    if (isHit) {
+        NSLog(@"判断为move");
+        return MoveType_Move;
+    }
+    
+    return MoveType_None;
+}
 #pragma mark 工具栏action
 -(void)outlineAction
 {

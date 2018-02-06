@@ -41,4 +41,17 @@
         CGContextRestoreGState(context);
     }
 }
+
+-(void)setActiveAnnotate:(PDFAnnotation *)activeAnnotate
+{
+    _activeAnnotate = activeAnnotate;
+    
+    if (activeAnnotate) {
+        self.userInteractionEnabled = NO;
+    }
+    else
+    {
+        self.userInteractionEnabled = YES;
+    }
+}
 @end

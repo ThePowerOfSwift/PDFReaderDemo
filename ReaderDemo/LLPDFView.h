@@ -12,6 +12,4 @@
 
 @property(nonatomic,strong)PDFAnnotation * activeAnnotate;
 
-@property(nonatomic, assign)BOOL isMove;
-
 @end
