@@ -97,6 +97,9 @@ typedef NS_ENUM(NSInteger, MoveType) {
             else
             {
                 self.pdfview.activeAnnotate = annotate;
+                
+                CGFloat widthOfScale = [self.pdfview convertRect:CGRectMake(0, 0, 50, 50) toPage:self.pdfview.currentPage].size.width;
+                self.pdfview.widthOfAnnotateScale = widthOfScale;
             }
             [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
             haveHit = YES;
@@ -124,20 +127,26 @@ typedef NS_ENUM(NSInteger, MoveType) {
     {
         CGPoint loactionInPDFView = [ges locationInView:self.pdfview];
         CGPoint locationInPDF = [self.pdfview convertPoint:loactionInPDFView toPage:self.pdfview.currentPage];
+        CGSize moveSize = CGSizeMake(locationInPDF.x - self.lastTouchPoint.x, locationInPDF.y - self.lastTouchPoint.y);
 
         switch (self.moveType) {
             case MoveType_Move:
             {
-                self.pdfview.activeAnnotate.bounds = CGRectMake(self.pdfview.activeAnnotate.bounds.origin.x - CGRectGetMidX(self.pdfview.activeAnnotate.bounds) + locationInPDF.x, self.pdfview.activeAnnotate.bounds.origin.y - CGRectGetMidY(self.pdfview.activeAnnotate.bounds) + locationInPDF.y, self.pdfview.activeAnnotate.bounds.size.width, self.pdfview.activeAnnotate.bounds.size.height);
+                CGRect bounds = self.pdfview.activeAnnotate.bounds;
+                bounds.origin = CGPointMake(bounds.origin.x + moveSize.width, bounds.origin.y + moveSize.height);
+                self.pdfview.activeAnnotate.bounds = bounds;
+
+//                self.pdfview.activeAnnotate.bounds = CGRectMake(self.pdfview.activeAnnotate.bounds.origin.x - CGRectGetMidX(self.pdfview.activeAnnotate.bounds) + locationInPDF.x, self.pdfview.activeAnnotate.bounds.origin.y - CGRectGetMidY(self.pdfview.activeAnnotate.bounds) + locationInPDF.y, self.pdfview.activeAnnotate.bounds.size.width, self.pdfview.activeAnnotate.bounds.size.height);
                 
                 [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
+                
+                self.lastTouchPoint = locationInPDF;
             }
                 break;
             case MoveType_Scale:
             {
-                CGSize scaleSize = CGSizeMake(locationInPDF.x - self.lastTouchPoint.x, locationInPDF.y - self.lastTouchPoint.y);
                 CGRect bounds = self.pdfview.activeAnnotate.bounds;
-                bounds.size = CGSizeMake(bounds.size.width + scaleSize.width, bounds.size.height + scaleSize.height);
+                bounds.size = CGSizeMake(bounds.size.width + moveSize.width, bounds.size.height + moveSize.height);
                 self.pdfview.activeAnnotate.bounds = bounds;
                 [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
                 
@@ -158,12 +167,13 @@ typedef NS_ENUM(NSInteger, MoveType) {
     }
 }
 
--(MoveType)moveType:(CGPoint)locationInPDF annotate:(PDFAnnotation*)annotate inPDF:(PDFView*)pdfview
+-(MoveType)moveType:(CGPoint)locationInPDF annotate:(PDFAnnotation*)annotate inPDF:(LLPDFView*)pdfview
 {
     //1.检查是否命中周边缩放区域
-    CGFloat widthOfScale = [pdfview convertRect:CGRectMake(0, 0, 100, 100) toPage:self.pdfview.currentPage].size.width;
+    CGFloat widthOfScale = [pdfview convertRect:CGRectMake(0, 0, 50, 50) toPage:pdfview.currentPage].size.width;
     CGFloat originYOfScale = CGRectGetMaxY(annotate.bounds) - widthOfScale/2;
     CGFloat originXOfScale = CGRectGetMaxX(annotate.bounds) - widthOfScale/2;
+    pdfview.widthOfAnnotateScale = widthOfScale;
     CGRect rectOfScale = CGRectMake(originXOfScale, originYOfScale, widthOfScale, widthOfScale);
     
     BOOL isHit = CGRectContainsPoint(rectOfScale, locationInPDF);

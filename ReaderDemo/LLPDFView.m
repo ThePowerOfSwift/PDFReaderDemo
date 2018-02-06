@@ -22,10 +22,10 @@
         if (CGSizeEqualToSize(CGSizeZero, self.activeAnnotate.bounds.size))
             return;
         
-        CGRect leftTop = CGRectMake(self.activeAnnotate.bounds.origin.x - 5, self.activeAnnotate.bounds.origin.y - 5, 10, 10);
-        CGRect rightTop = CGRectMake(self.activeAnnotate.bounds.origin.x + self.activeAnnotate.bounds.size.width - 5, self.activeAnnotate.bounds.origin.y - 5, 10, 10);
-        CGRect leftBottom = CGRectMake(self.activeAnnotate.bounds.origin.x - 5, self.activeAnnotate.bounds.origin.y + self.activeAnnotate.bounds.size.height - 5, 10, 10);
-        CGRect rightBottom = CGRectMake(self.activeAnnotate.bounds.origin.x + self.activeAnnotate.bounds.size.width - 5, self.activeAnnotate.bounds.origin.y+ self.activeAnnotate.bounds.size.height - 5, 10, 10);
+        CGRect leftTop = CGRectMake(self.activeAnnotate.bounds.origin.x - _widthOfAnnotateScale/2, self.activeAnnotate.bounds.origin.y - _widthOfAnnotateScale/2, _widthOfAnnotateScale, _widthOfAnnotateScale);
+        CGRect rightTop = CGRectMake(self.activeAnnotate.bounds.origin.x + self.activeAnnotate.bounds.size.width - _widthOfAnnotateScale/2, self.activeAnnotate.bounds.origin.y - _widthOfAnnotateScale/2, _widthOfAnnotateScale, _widthOfAnnotateScale);
+        CGRect leftBottom = CGRectMake(self.activeAnnotate.bounds.origin.x - _widthOfAnnotateScale/2, self.activeAnnotate.bounds.origin.y + self.activeAnnotate.bounds.size.height - _widthOfAnnotateScale/2, _widthOfAnnotateScale, _widthOfAnnotateScale);
+        CGRect rightBottom = CGRectMake(self.activeAnnotate.bounds.origin.x + self.activeAnnotate.bounds.size.width - _widthOfAnnotateScale/2, self.activeAnnotate.bounds.origin.y+ self.activeAnnotate.bounds.size.height - _widthOfAnnotateScale/2, _widthOfAnnotateScale, _widthOfAnnotateScale);
         CGFloat lineWidth = 3;
         CGColorRef color = [UIColor redColor].CGColor;
         

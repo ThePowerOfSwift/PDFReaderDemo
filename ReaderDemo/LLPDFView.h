@@ -12,4 +12,6 @@
 
 @property(nonatomic,strong)PDFAnnotation * activeAnnotate;
 
+@property(nonatomic, assign) CGFloat widthOfAnnotateScale;
+
 @end
