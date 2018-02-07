@@ -25,6 +25,7 @@
 		6AF513072013232D00D9675E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6AF513062013232D00D9675E /* Assets.xcassets */; };
 		6AF5130A2013232D00D9675E /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6AF513082013232D00D9675E /* LaunchScreen.storyboard */; };
 		6AF5130D2013232D00D9675E /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AF5130C2013232D00D9675E /* main.m */; };
+		6AFBDF20202B248C00992E4C /* LLAnnotationTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 6AFBDF1F202B248C00992E4C /* LLAnnotationTextField.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,6 +57,8 @@
 		6AF513092013232D00D9675E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		6AF5130B2013232D00D9675E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		6AF5130C2013232D00D9675E /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		6AFBDF1E202B248C00992E4C /* LLAnnotationTextField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = LLAnnotationTextField.h; sourceTree = "<group>"; };
+		6AFBDF1F202B248C00992E4C /* LLAnnotationTextField.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = LLAnnotationTextField.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +118,8 @@
 				6ABAC15B201CAC3B00296532 /* LLPDFView.m */,
 				6ABF600120287A8900E29BCE /* LLOverlayView.h */,
 				6ABF600220287A8900E29BCE /* LLOverlayView.m */,
+				6AFBDF1E202B248C00992E4C /* LLAnnotationTextField.h */,
+				6AFBDF1F202B248C00992E4C /* LLAnnotationTextField.m */,
 			);
 			path = ReaderDemo;
 			sourceTree = "<group>";
@@ -200,6 +205,7 @@
 				6AF513022013232D00D9675E /* ViewController.m in Sources */,
 				6AF5130D2013232D00D9675E /* main.m in Sources */,
 				6ABAC15C201CAC3B00296532 /* LLPDFView.m in Sources */,
+				6AFBDF20202B248C00992E4C /* LLAnnotationTextField.m in Sources */,
 				6ABAC145201B5A6800296532 /* LLToolBar.m in Sources */,
 				6AD897ED2018C1F400841E61 /* LLTestView.m in Sources */,
 				6ABAC14B201B5F9C00296532 /* OutlineController.m in Sources */,

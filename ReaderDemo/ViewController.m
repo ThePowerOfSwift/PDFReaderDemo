@@ -12,6 +12,7 @@
 #import "LLToolBar.h"
 #import "OutlineController.h"
 #import "LLPDFView.h"
+#import "LLAnnotationTextField.h"
 
 typedef NS_ENUM(NSInteger, MoveType) {
     MoveType_None = 0,
@@ -72,7 +73,7 @@ typedef NS_ENUM(NSInteger, MoveType) {
     
     [tap requireGestureRecognizerToFail:doubleTap];
     [tap requireGestureRecognizerToFail:pan];
-    [pan requireGestureRecognizerToFail:doubleTap];
+//    [pan requireGestureRecognizerToFail:doubleTap];
 }
 
 #pragma mark 点击选中annotate
@@ -135,8 +136,6 @@ typedef NS_ENUM(NSInteger, MoveType) {
                 CGRect bounds = self.pdfview.activeAnnotate.bounds;
                 bounds.origin = CGPointMake(bounds.origin.x + moveSize.width, bounds.origin.y + moveSize.height);
                 self.pdfview.activeAnnotate.bounds = bounds;
-
-//                self.pdfview.activeAnnotate.bounds = CGRectMake(self.pdfview.activeAnnotate.bounds.origin.x - CGRectGetMidX(self.pdfview.activeAnnotate.bounds) + locationInPDF.x, self.pdfview.activeAnnotate.bounds.origin.y - CGRectGetMidY(self.pdfview.activeAnnotate.bounds) + locationInPDF.y, self.pdfview.activeAnnotate.bounds.size.width, self.pdfview.activeAnnotate.bounds.size.height);
                 
                 [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
                 
@@ -227,6 +226,36 @@ typedef NS_ENUM(NSInteger, MoveType) {
 {
     NSLog(@"%s",__func__);
     
+    CGPoint locationInPDFView = [ges locationInView:self.pdfview];
+    CGPoint locationInPDF = [self.pdfview convertPoint:locationInPDFView toPage:self.pdfview.currentPage];
+    
+    BOOL haveHit = NO;
+    NSArray<PDFAnnotation*>* array = [self.pdfview.currentPage annotations];
+    for (PDFAnnotation * annotate in array) {
+        BOOL isHit = CGRectContainsPoint(annotate.bounds, locationInPDF);
+        if (isHit) {
+            self.pdfview.activeAnnotate = annotate;
+            CGFloat widthOfScale = [self.pdfview convertRect:CGRectMake(0, 0, 50, 50) toPage:self.pdfview.currentPage].size.width;
+            self.pdfview.widthOfAnnotateScale = widthOfScale;
+            
+            [self.pdfview.activeAnnotate setShouldDisplay:NO];
+            
+            LLAnnotationTextField * textField = [[LLAnnotationTextField alloc]initWithAnnotate:self.pdfview.activeAnnotate pdfview:self.pdfview];
+            
+            [self.pdfview setNeedsDisplayInRect:self.pdfview.activeAnnotate.bounds];
+            haveHit = YES;
+            break;
+        }
+    }
+    if (!haveHit) {
+        PDFAnnotation * annotate = self.pdfview.activeAnnotate;
+        self.pdfview.activeAnnotate = nil;
+        [self.pdfview setNeedsDisplayInRect:annotate.bounds];
+    }
+}
+
+-(void)menuAction:(UIGestureRecognizer*)ges
+{
     UIMenuController * menu = [UIMenuController sharedMenuController];
     if (menu.menuVisible) {
         [menu setMenuVisible:NO];
